@@ -6,6 +6,11 @@
 import express from "express";
 import { MongoClient } from "mongodb";
 
+// to hide the name and password
+import dotenv from "dotenv"; //to use env file
+
+dotenv.config();
+// console.log(process.env.MONGO_URL)
 
 const app = express()
 
@@ -82,7 +87,12 @@ const movies = [
     }
     ]
 
-    const MONGO_URL = 'mongodb://localhost'
+    // intercepts all the requests and converts the data to json
+app.use(express.json())
+
+    // const MONGO_URL = 'mongodb://localhost'
+    const MONGO_URL =  process.env.MONGO_URL
+    // the above step is used to hide the username and password of the mongo db atlas link
 
     // connect mongo db
   async function createConnection(){
@@ -102,6 +112,16 @@ app.get('/movies', function (req, res) {
     res.send(movies)
   })
 
+  app.get('/movies',async function (req, res) {
+    // db.movies.find({})
+    // find will only display the first 20
+    // cursor - pagination
+    const movie = await client.db("movies").collection("movies").find({}).toArray(); //convert pagination to array
+    console.log("movies" + movies)
+    res.send(movies)
+  })
+
+
   app.get('/movies/:id',async function (req, res) {
     console.log(req.params);
     // db.movies.findOne({id:"101"})
@@ -113,6 +133,21 @@ app.get('/movies', function (req, res) {
     {movie ? res.send(movie) : res.status(404).send({msg:"movie not found"})};
   })
 
+
+
+// creating api for sending/creating data
+
+// this data is not coming as json so middleware is used to convert the data to json , body-> json(inbuilt middleware)
+  app.post('/movies',express.json(),async function (req, res) {
+    const data = req.body;
+    console.log(data)
+        // db.movies.insertMany(data)
+    const result = await client.db("movies").collection("movies").insertMany(data)
+    res.send(result)
+  })
+
+
+  
 app.listen(port,()=>console.log(`app started in ${port}`))
 
 // npm init -y -> to create package json
@@ -132,3 +167,5 @@ app.listen(port,()=>console.log(`app started in ${port}`))
 // npm run dev to start
 
 // npm i mongodb -> install mongodb npm to connect node to mongo db
+
+
