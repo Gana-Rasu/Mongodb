@@ -13,7 +13,8 @@ dotenv.config();
 
 const app = express();
 
-const port = 4000;
+// const port = 4000;
+const port = process.env.PORT;  //for heroko deployment
 /// refers to the home path
 // callback function starts a request and gets a response
 
