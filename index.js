@@ -1,9 +1,8 @@
 // const express = require('express'); //importing 3rd party package
 // const { MongoClient } = require('mongodb');
 
-
 //  adding this in package  "type": "module",
-import express from "express";
+import express, { request } from "express";
 import { MongoClient } from "mongodb";
 
 // to hide the name and password
@@ -12,143 +11,207 @@ import dotenv from "dotenv"; //to use env file
 dotenv.config();
 // console.log(process.env.MONGO_URL)
 
-const app = express()
+const app = express();
 
 const port = 4000;
 /// refers to the home path
 // callback function starts a request and gets a response
 
 const movies = [
+  {
+    id: "100",
+    name: "RRR",
+    poster:
+      "https://englishtribuneimages.blob.core.windows.net/gallary-content/2021/6/Desk/2021_6$largeimg_977224513.JPG",
+    rating: 8.8,
+    summary:
+      "RRR is an upcoming Indian Telugu-language period action drama film directed by S. S. Rajamouli, and produced by D. V. V. Danayya of DVV Entertainments.",
+    trailer: "https://www.youtube.com/embed/f_vbAtFSEc0",
+  },
+  {
+    id: "101",
+    name: "Iron man 2",
+    poster:
+      "https://m.media-amazon.com/images/M/MV5BMTM0MDgwNjMyMl5BMl5BanBnXkFtZTcwNTg3NzAzMw@@._V1_FMjpg_UX1000_.jpg",
+    rating: 7,
+    summary:
+      "With the world now aware that he is Iron Man, billionaire inventor Tony Stark (Robert Downey Jr.) faces pressure from all sides to share his technology with the military. He is reluctant to divulge the secrets of his armored suit, fearing the information will fall into the wrong hands. With Pepper Potts (Gwyneth Paltrow) and Rhodes (Don Cheadle) by his side, Tony must forge new alliances and confront a powerful new enemy.",
+    trailer: "https://www.youtube.com/embed/wKtcmiifycU",
+  },
+  {
+    id: "102",
+    name: "No Country for Old Men",
+    poster:
+      "https://upload.wikimedia.org/wikipedia/en/8/8b/No_Country_for_Old_Men_poster.jpg",
+    rating: 8.1,
+    summary:
+      "A hunter's life takes a drastic turn when he discovers two million dollars while strolling through the aftermath of a drug deal. He is then pursued by a psychopathic killer who wants the money.",
+    trailer: "https://www.youtube.com/embed/38A__WT3-o0",
+  },
+  {
+    id: "103",
+    name: "Jai Bhim",
+    poster:
+      "https://m.media-amazon.com/images/M/MV5BY2Y5ZWMwZDgtZDQxYy00Mjk0LThhY2YtMmU1MTRmMjVhMjRiXkEyXkFqcGdeQXVyMTI1NDEyNTM5._V1_FMjpg_UX1000_.jpg",
+    summary:
+      "A tribal woman and a righteous lawyer battle in court to unravel the mystery around the disappearance of her husband, who was picked up the police on a false case",
+    rating: 8.8,
+    trailer: "https://www.youtube.com/embed/nnXpbTFrqXA",
+  },
+  {
+    id: "104",
+    name: "The Avengers",
+    rating: 8,
+    summary:
+      "Marvel's The Avengers (classified under the name Marvel Avengers\n Assemble in the United Kingdom and Ireland), or simply The Avengers, is\n a 2012 American superhero film based on the Marvel Comics superhero team\n of the same name.",
+    poster:
+      "https://terrigen-cdn-dev.marvel.com/content/prod/1x/avengersendgame_lob_crd_05.jpg",
+    trailer: "https://www.youtube.com/embed/eOrNdBpGMv8",
+  },
+  {
+    id: "105",
+    name: "Interstellar",
+    poster: "https://m.media-amazon.com/images/I/A1JVqNMI7UL._SL1500_.jpg",
+    rating: 8.6,
+    summary:
+      "When Earth becomes uninhabitable in the future, a farmer and ex-NASA\n pilot, Joseph Cooper, is tasked to pilot a spacecraft, along with a team\n of researchers, to find a new planet for humans.",
+    trailer: "https://www.youtube.com/embed/zSWdZVtXT7E",
+  },
+  {
+    id: "106",
+    name: "Baahubali",
+    poster: "https://flxt.tmsimg.com/assets/p11546593_p_v10_af.jpg",
+    rating: 8,
+    summary:
+      "In the kingdom of Mahishmati, Shivudu falls in love with a young warrior woman. While trying to woo her, he learns about the conflict-ridden past of his family and his true legacy.",
+    trailer: "https://www.youtube.com/embed/sOEg_YZQsTI",
+  },
+  {
+    id: "107",
+    name: "Ratatouille",
+    poster:
+      "https://resizing.flixster.com/gL_JpWcD7sNHNYSwI1ff069Yyug=/ems.ZW1zLXByZC1hc3NldHMvbW92aWVzLzc4ZmJhZjZiLTEzNWMtNDIwOC1hYzU1LTgwZjE3ZjQzNTdiNy5qcGc=",
+    rating: 8,
+    summary:
+      "Remy, a rat, aspires to become a renowned French chef. However, he fails to realise that people despise rodents and will never enjoy a meal cooked by him.",
+    trailer: "https://www.youtube.com/embed/NgsQ8mVkN8w",
+  },
+];
 
-    {
-    "id": "100",
-    "name": "RRR",
-    "poster":
-    "https://englishtribuneimages.blob.core.windows.net/gallary-content/2021/6/Desk/2021_6$largeimg_977224513.JPG",
-    "rating": 8.8,
-    "summary": "RRR is an upcoming Indian Telugu-language period action drama film directed by S. S. Rajamouli, and produced by D. V. V. Danayya of DVV Entertainments.",
-    "trailer": "https://www.youtube.com/embed/f_vbAtFSEc0"
-    },
-    {
-    "id": "101",
-    "name": "Iron man 2",
-    "poster": "https://m.media-amazon.com/images/M/MV5BMTM0MDgwNjMyMl5BMl5BanBnXkFtZTcwNTg3NzAzMw@@._V1_FMjpg_UX1000_.jpg",
-    "rating": 7,
-    "summary": "With the world now aware that he is Iron Man, billionaire inventor Tony Stark (Robert Downey Jr.) faces pressure from all sides to share his technology with the military. He is reluctant to divulge the secrets of his armored suit, fearing the information will fall into the wrong hands. With Pepper Potts (Gwyneth Paltrow) and Rhodes (Don Cheadle) by his side, Tony must forge new alliances and confront a powerful new enemy.",
-    "trailer": "https://www.youtube.com/embed/wKtcmiifycU"
-    },
-    {
-    "id": "102",
-    "name": "No Country for Old Men",
-    "poster": "https://upload.wikimedia.org/wikipedia/en/8/8b/No_Country_for_Old_Men_poster.jpg",
-    "rating": 8.1,
-    "summary": "A hunter's life takes a drastic turn when he discovers two million dollars while strolling through the aftermath of a drug deal. He is then pursued by a psychopathic killer who wants the money.",
-    "trailer": "https://www.youtube.com/embed/38A__WT3-o0"
-    },
-    {
-    "id": "103",
-    "name": "Jai Bhim",
-    "poster": "https://m.media-amazon.com/images/M/MV5BY2Y5ZWMwZDgtZDQxYy00Mjk0LThhY2YtMmU1MTRmMjVhMjRiXkEyXkFqcGdeQXVyMTI1NDEyNTM5._V1_FMjpg_UX1000_.jpg",
-    "summary": "A tribal woman and a righteous lawyer battle in court to unravel the mystery around the disappearance of her husband, who was picked up the police on a false case",
-    "rating": 8.8,
-    "trailer": "https://www.youtube.com/embed/nnXpbTFrqXA"
-    },
-    {
-    "id": "104",
-    "name": "The Avengers",
-    "rating": 8,
-    "summary": "Marvel's The Avengers (classified under the name Marvel Avengers\n Assemble in the United Kingdom and Ireland), or simply The Avengers, is\n a 2012 American superhero film based on the Marvel Comics superhero team\n of the same name.",
-    "poster": "https://terrigen-cdn-dev.marvel.com/content/prod/1x/avengersendgame_lob_crd_05.jpg",
-    "trailer": "https://www.youtube.com/embed/eOrNdBpGMv8"
-    },
-    {
-    "id": "105",
-    "name": "Interstellar",
-    "poster": "https://m.media-amazon.com/images/I/A1JVqNMI7UL._SL1500_.jpg",
-    "rating": 8.6,
-    "summary": "When Earth becomes uninhabitable in the future, a farmer and ex-NASA\n pilot, Joseph Cooper, is tasked to pilot a spacecraft, along with a team\n of researchers, to find a new planet for humans.",
-    "trailer": "https://www.youtube.com/embed/zSWdZVtXT7E"
-    },
-    {
-    "id": "106",
-    "name": "Baahubali",
-    "poster": "https://flxt.tmsimg.com/assets/p11546593_p_v10_af.jpg",
-    "rating": 8,
-    "summary": "In the kingdom of Mahishmati, Shivudu falls in love with a young warrior woman. While trying to woo her, he learns about the conflict-ridden past of his family and his true legacy.",
-    "trailer": "https://www.youtube.com/embed/sOEg_YZQsTI"
-    },
-    {
-    "id": "107",
-    "name": "Ratatouille",
-    "poster": "https://resizing.flixster.com/gL_JpWcD7sNHNYSwI1ff069Yyug=/ems.ZW1zLXByZC1hc3NldHMvbW92aWVzLzc4ZmJhZjZiLTEzNWMtNDIwOC1hYzU1LTgwZjE3ZjQzNTdiNy5qcGc=",
-    "rating": 8,
-    "summary": "Remy, a rat, aspires to become a renowned French chef. However, he fails to realise that people despise rodents and will never enjoy a meal cooked by him.",
-    "trailer": "https://www.youtube.com/embed/NgsQ8mVkN8w"
-    }
-    ]
+// intercepts all the requests and converts the data to json
+app.use(express.json());
 
-    // intercepts all the requests and converts the data to json
-app.use(express.json())
+// const MONGO_URL = 'mongodb://localhost'
+const MONGO_URL = process.env.MONGO_URL;
+// the above step is used to hide the username and password of the mongo db atlas link
 
-    // const MONGO_URL = 'mongodb://localhost'
-    const MONGO_URL =  process.env.MONGO_URL
-    // the above step is used to hide the username and password of the mongo db atlas link
+// connect mongo db
+async function createConnection() {
+  const client = new MongoClient(MONGO_URL);
+  await client.connect();
+  console.log("mongo db is connected");
+  return client;
+}
 
-    // connect mongo db
-  async function createConnection(){
-        const client = new MongoClient(MONGO_URL)
-      await  client.connect();
-      console.log("mongo db is connected")
-      return client
-    }
+const client = await createConnection();
 
-    const client = await createConnection();
+app.get("/", function (req, res) {
+  res.send("Hello world");
+});
 
-app.get('/', function (req, res) {
-  res.send("Hello world")
-})
-
-app.get('/movies', function (req, res) {
-    res.send(movies)
-  })
-
-  app.get('/movies',async function (req, res) {
-    // db.movies.find({})
-    // find will only display the first 20
-    // cursor - pagination
-    const movie = await client.db("movies").collection("movies").find({}).toArray(); //convert pagination to array
-    console.log("movies" + movies)
-    res.send(movies)
-  })
-
-
-  app.get('/movies/:id',async function (req, res) {
-    console.log(req.params);
-    // db.movies.findOne({id:"101"})
-    const {id} = req.params;
-    // find always returns a element , that's why it's used instead of filter
-    //  const movie = movies.find((mv)=>mv.id===id)
-    const movie = await client.db("movies").collection("movies").findOne({id:id})
-
-    {movie ? res.send(movie) : res.status(404).send({msg:"movie not found"})};
-  })
+// app.get("/movies", function (req, res) {
+//   res.send(movies);
+// });
 
 
+
+app.get("/movies", async function (req, res) {
+  // db.movies.find({})
+
+  if(req.query.rating){
+    req.query.rating = +req.query.rating;
+  }
+
+console.log(req.query)
+
+  // find will only display the first 20
+  // cursor - pagination
+  const movies = await client
+    .db("movies")
+    .collection("movies")
+    .find(req.query)
+    .toArray(); //convert pagination to array
+  res.send(movies);
+});
+
+app.get("/movies/:id", async function (req, res) {
+  console.log(req.params);
+  // db.movies.findOne({id:"101"})
+  const { id } = req.params;
+  // find always returns a element , that's why it's used instead of filter
+  //  const movie = movies.find((mv)=>mv.id===id)
+  const movie = await client
+    .db("movies")
+    .collection("movies")
+    .findOne({ id: id });
+
+  {
+    movie ? res.send(movie) : res.status(404).send({ msg: "movie not found" });
+  }
+});
+
+// api for deleting
+app.delete("/movies/:id", async function (req, res) {
+  console.log(req.params);
+  // db.movies.deleteOne({id:"101"})
+  const { id } = req.params;
+  // find always returns a element , that's why it's used instead of filter
+  //  const movie = movies.find((mv)=>mv.id===id)
+  const result = await client
+    .db("movies")
+    .collection("movies")
+    .deleteOne({ id: id });
+
+    // using the deletecount of postman
+  {
+    result.deletedCount > 0  ? res.send(result) : res.status(404).send({ msg: "movie not found" });
+  }
+});
+
+// api for updating rating of a movie
+app.put("/movies/:id", async function (req, res) {
+  console.log(req.params);
+ 
+  const { id } = req.params;
+  const data = req.body;
+
+ // db.movies.updateOne({id:"101"},{$set:data})
+ const result = await client
+ .db("movies")
+ .collection("movies")
+ .updateOne({id:id},{$set:data});
+res.send(result);
+
+});
 
 // creating api for sending/creating data
 
 // this data is not coming as json so middleware is used to convert the data to json , body-> json(inbuilt middleware)
-  app.post('/movies',express.json(),async function (req, res) {
-    const data = req.body;
-    console.log(data)
-        // db.movies.insertMany(data)
-    const result = await client.db("movies").collection("movies").insertMany(data)
-    res.send(result)
-  })
+app.post("/movies", express.json(), async function (req, res) {
+  const data = req.body;
+  console.log(data);
+  // db.movies.insertMany(data)
+  const result = await client
+    .db("movies")
+    .collection("movies")
+    .insertMany(data);
+  res.send(result);
+});
 
 
-  
-app.listen(port,()=>console.log(`app started in ${port}`))
+
+
+app.listen(port, () => console.log(`app started in ${port}`));
 
 // npm init -y -> to create package json
 // npm i express
@@ -158,14 +221,11 @@ app.listen(port,()=>console.log(`app started in ${port}`))
 //  got remote -v
 //    "start": "node index.js", -> inside scripts of package.json and give npm start to run like react
 
-
 // control c to cut the server
 
-// npm install --save-dev nodemon 
+// npm install --save-dev nodemon
 // and add "dev": "nodemon index.js" inside scripts in package.json
 
 // npm run dev to start
 
 // npm i mongodb -> install mongodb npm to connect node to mongo db
-
-
