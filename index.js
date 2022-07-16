@@ -7,6 +7,7 @@ import { MongoClient } from "mongodb";
 
 // to hide the name and password
 import dotenv from "dotenv"; //to use env file
+import { moviesRouter } from "./routes/Movies.js";
 
 dotenv.config();
 // console.log(process.env.MONGO_URL)
@@ -114,7 +115,7 @@ async function createConnection() {
   return client;
 }
 
-const client = await createConnection();
+export const client = await createConnection();
 
 app.get("/", function (req, res) {
   res.send("Hello world");
@@ -124,93 +125,8 @@ app.get("/", function (req, res) {
 //   res.send(movies);
 // });
 
-
-
-app.get("/movies", async function (req, res) {
-  // db.movies.find({})
-
-  if(req.query.rating){
-    req.query.rating = +req.query.rating;
-  }
-
-console.log(req.query)
-
-  // find will only display the first 20
-  // cursor - pagination
-  const movies = await client
-    .db("movies")
-    .collection("movies")
-    .find(req.query)
-    .toArray(); //convert pagination to array
-  res.send(movies);
-});
-
-app.get("/movies/:id", async function (req, res) {
-  console.log(req.params);
-  // db.movies.findOne({id:"101"})
-  const { id } = req.params;
-  // find always returns a element , that's why it's used instead of filter
-  //  const movie = movies.find((mv)=>mv.id===id)
-  const movie = await client
-    .db("movies")
-    .collection("movies")
-    .findOne({ id: id });
-
-  {
-    movie ? res.send(movie) : res.status(404).send({ msg: "movie not found" });
-  }
-});
-
-// api for deleting
-app.delete("/movies/:id", async function (req, res) {
-  console.log(req.params);
-  // db.movies.deleteOne({id:"101"})
-  const { id } = req.params;
-  // find always returns a element , that's why it's used instead of filter
-  //  const movie = movies.find((mv)=>mv.id===id)
-  const result = await client
-    .db("movies")
-    .collection("movies")
-    .deleteOne({ id: id });
-
-    // using the deletecount of postman
-  {
-    result.deletedCount > 0  ? res.send(result) : res.status(404).send({ msg: "movie not found" });
-  }
-});
-
-// api for updating rating of a movie
-app.put("/movies/:id", async function (req, res) {
-  console.log(req.params);
- 
-  const { id } = req.params;
-  const data = req.body;
-
- // db.movies.updateOne({id:"101"},{$set:data})
- const result = await client
- .db("movies")
- .collection("movies")
- .updateOne({id:id},{$set:data});
-res.send(result);
-
-});
-
-// creating api for sending/creating data
-
-// this data is not coming as json so middleware is used to convert the data to json , body-> json(inbuilt middleware)
-app.post("/movies", express.json(), async function (req, res) {
-  const data = req.body;
-  console.log(data);
-  // db.movies.insertMany(data)
-  const result = await client
-    .db("movies")
-    .collection("movies")
-    .insertMany(data);
-  res.send(result);
-});
-
-
-
+// connecting the /movies with the router created in the movies page
+app.use("/movies",moviesRouter)
 
 app.listen(port, () => console.log(`app started in ${port}`));
 
