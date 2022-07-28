@@ -28,11 +28,10 @@ router.get("/",async function (req, res) {
 router.get("/:id", async function (req, res) {
     console.log(req.params);
     // db.movies.findOne({id:"101"})
-    // const { id } = req.params;
-    var myId = JSON.parse(req.params.id);
+    const { id } = req.params;
     // find always returns a element , that's why it's used instead of filter
     //  const movie = movies.find((mv)=>mv.id===id)
-    const movie = await getMoviebyId(myId);
+    const movie = await getMoviebyId(id);
   
     {
       movie ? res.send(movie) : res.status(404).send({ msg: "movie not found" });
