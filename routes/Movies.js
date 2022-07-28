@@ -3,13 +3,14 @@
 
 import express from "express";
 import { getAllMovies, getMoviebyId, deleteMoviebyId, updateMoviebyId, createMovies } from "./createMovies.js";
+// import { auth } from "./middleware/auth.js";
 
 
 // establishing a router connection
 const router = express.Router();
 
 // instead of app router is being used and followed
-router.get("/", async function (req, res) {
+router.get("/",async function (req, res) {
     // db.movies.find({})
   
     if(req.query.rating){
@@ -27,10 +28,11 @@ router.get("/", async function (req, res) {
 router.get("/:id", async function (req, res) {
     console.log(req.params);
     // db.movies.findOne({id:"101"})
-    const { id } = req.params;
+    // const { id } = req.params;
+    var myId = JSON.parse(req.params.id);
     // find always returns a element , that's why it's used instead of filter
     //  const movie = movies.find((mv)=>mv.id===id)
-    const movie = await getMoviebyId(id);
+    const movie = await getMoviebyId(myId);
   
     {
       movie ? res.send(movie) : res.status(404).send({ msg: "movie not found" });

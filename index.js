@@ -11,6 +11,7 @@ import { moviesRouter } from "./routes/Movies.js";
 
 // importing cors to allow node link to be accessible
 import cors from "cors";
+import { usersRouter } from "./routes/Users.js";
 
 // const movies = [
 //   {
@@ -131,12 +132,40 @@ app.get("/", function (req, res) {
   res.send("Hello world");
 });
 
-// app.get("/movies", function (req, res) {
-//   res.send(movies);
+
+// const mobiles = [
+//   {
+//     model: "OnePlus 9 5G",
+//     img: "https://m.media-amazon.com/images/I/61fy+u9uqPL._SX679_.jpg",
+//     company: "Oneplus"
+//   },
+//   {
+//     model: "Iphone 13 mini",
+//     img:
+//       "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/iphone-13-mini-blue-select-2021?wid=470&hei=556&fmt=jpeg&qlt=95&.v=1645572315986",
+//     company: "Apple"
+//   },
+//   {
+//     model: "Samsung s21 ultra",
+//     img: "https://m.media-amazon.com/images/I/81kfA-GtWwL._SY606_.jpg",
+//     company: "Samsung"
+//   },
+//   {
+//     model: "Xiomi mi 11",
+//     img: "https://m.media-amazon.com/images/I/51K4vNxMAhS._AC_SX522_.jpg",
+//     company: "Xiomi"
+//   }
+// ];
+
+// app.get("/mobiles", function (req, res) {
+//   res.send(mobiles);
 // });
+
+
 
 // connecting the /movies with the router created in the movies page
 app.use("/movies",moviesRouter)
+app.use("/users",usersRouter)
 
 app.listen(port, () => console.log(`app started in ${port}`));
 

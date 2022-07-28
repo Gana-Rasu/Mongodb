@@ -12,6 +12,14 @@ export async function createMovies(data) {
         .collection("movies")
         .insertMany(data);
 }
+
+export async function createUsers(data){
+    return await client
+        .db("movies")
+        .collection("users")
+        .insertOne(data);
+}
+
 export async function updateMoviebyId(id, data) {
     return await client
         .db("movies")
@@ -30,6 +38,15 @@ export async function getMoviebyId(id) {
         .collection("movies")
         .findOne({ _id: ObjectId(id) });
 }
+
+export async function getUserbyName(username){
+    // db.users.findOne({username:username})
+    return await client
+        .db("movies")
+        .collection("users")
+        .findOne({username:username});
+}
+
 export async function getAllMovies(req) {
     return await client
         .db("movies")
