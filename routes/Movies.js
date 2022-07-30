@@ -3,14 +3,14 @@
 
 import express from "express";
 import { getAllMovies, getMoviebyId, deleteMoviebyId, updateMoviebyId, createMovies } from "./createMovies.js";
-// import { auth } from "./middleware/auth.js";
+import { auth } from "./middleware/auth.js";
 
 
 // establishing a router connection
 const router = express.Router();
 
 // instead of app router is being used and followed
-router.get("/",async function (req, res) {
+router.get("/",auth,async function (req, res) {
     // db.movies.find({})
   
     if(req.query.rating){

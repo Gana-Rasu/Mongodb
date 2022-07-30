@@ -3,7 +3,7 @@ import {  createUsers, getUserbyName } from "./createMovies.js";
 import bcrypt from "bcrypt";
 
 // import jwt to produce token and get access
-// import jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
 
 
@@ -58,8 +58,8 @@ router.post("/signup", express.json(), async function (req, res) {
        console.log(ispasswordmatch);
 
        if(ispasswordmatch){
-        // const token = jwt.sign({ id: userfromdb._id }, process.env.SECRET_KEY,{expiresIn:"1d"});
-        res.send({message:"successful login"}) //
+        const token = jwt.sign({ id: userfromdb._id }, process.env.SECRET_KEY,{expiresIn:"1d"});
+        res.send({message:"successful login",token:token}) //
     }
     else{
         res.status(400).send({message:"invalid credentials"})
