@@ -97,19 +97,12 @@ import { usersRouter } from "./routes/Users.js";
 dotenv.config();
 // console.log(process.env.MONGO_URL)
 
-
-
 const app = express();
-app.use(cors({origin:"*"}));
+app.use(cors({ origin: "*" }));
 // const port = 4000;
-const port = process.env.PORT;  //for heroko deployment
+const port = process.env.PORT; //for heroko deployment
 /// refers to the home path
 // callback function starts a request and gets a response
-
-
-
-
-
 
 // intercepts all the requests and converts the data to json
 app.use(express.json());
@@ -132,40 +125,52 @@ app.get("/", function (req, res) {
   res.send("Hello world");
 });
 
+// mobile project
+
+// app.use(express.json()); should be used on seperate file
 
 // const mobiles = [
 //   {
 //     model: "OnePlus 9 5G",
 //     img: "https://m.media-amazon.com/images/I/61fy+u9uqPL._SX679_.jpg",
-//     company: "Oneplus"
+//     company: "Oneplus",
 //   },
 //   {
 //     model: "Iphone 13 mini",
-//     img:
-//       "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/iphone-13-mini-blue-select-2021?wid=470&hei=556&fmt=jpeg&qlt=95&.v=1645572315986",
-//     company: "Apple"
+//     img: "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/iphone-13-mini-blue-select-2021?wid=470&hei=556&fmt=jpeg&qlt=95&.v=1645572315986",
+//     company: "Apple",
 //   },
 //   {
 //     model: "Samsung s21 ultra",
 //     img: "https://m.media-amazon.com/images/I/81kfA-GtWwL._SY606_.jpg",
-//     company: "Samsung"
+//     company: "Samsung",
 //   },
 //   {
 //     model: "Xiomi mi 11",
 //     img: "https://m.media-amazon.com/images/I/51K4vNxMAhS._AC_SX522_.jpg",
-//     company: "Xiomi"
-//   }
+//     company: "Xiomi",
+//   },
 // ];
 
-// app.get("/mobiles", function (req, res) {
-//   res.send(mobiles);
-// });
+// get mobiles
+app.get("/mobiles",async function (req, res) {
+  const data = req.body;
+  // db.Mobiles.find({})
+  const result = await client.db("movies").collection("mobiles").find({}).toArray(); //to convert the pagination into array
+  res.send(result);
+});
 
-
+// create mobiles
+app.post("/mobiles", async function (req, res) {
+  const data = req.body;
+  // db.Mobiles.insertMany(data)
+  const result = await client.db("movies").collection("mobiles").insertMany(data);
+  res.send(result);
+});
 
 // connecting the /movies with the router created in the movies page
-app.use("/movies",moviesRouter)
-app.use("/users",usersRouter)
+app.use("/movies", moviesRouter);
+app.use("/users", usersRouter);
 
 app.listen(port, () => console.log(`app started in ${port}`));
 

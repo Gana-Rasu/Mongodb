@@ -5,7 +5,6 @@ import { client } from "../index.js";
 import { ObjectId } from "mongodb";
 // used to convert the id to _id of the mongodb id
 
-
 export async function createMovies(data) {
     return await client
         .db("movies")
@@ -26,6 +25,7 @@ export async function updateMoviebyId(id, data) {
         .collection("movies")
         .updateOne({ _id: ObjectId(id) }, { $set: data });
 }
+
 export async function deleteMoviebyId(id) {
     return await client
         .db("movies")

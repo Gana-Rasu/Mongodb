@@ -6,6 +6,7 @@ import { getAllMovies, getMoviebyId, deleteMoviebyId, updateMoviebyId, createMov
 import { auth } from "./middleware/auth.js";
 
 
+
 // establishing a router connection
 const router = express.Router();
 
@@ -76,6 +77,9 @@ router.post("/", express.json(), async function (req, res) {
     const result = await createMovies(data);
     res.send(result);
   });
+
+ 
+
 
   export const moviesRouter = router;
 

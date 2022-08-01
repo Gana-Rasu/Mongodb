@@ -10,7 +10,6 @@ next();
 }
 catch(err){
 res.status(401).send({error:err.message});
-
 }
 }
 
