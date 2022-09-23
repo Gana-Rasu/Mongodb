@@ -52,6 +52,7 @@ console.log(global)
 // process is a global object inside that has argv (argument value)
 
 console.log(process.argv)
+// process.argv displays what is typed in terminal
 // output
 // $ node filesystem.js 100
 // 20
