@@ -40,6 +40,7 @@ fs.readFile('./read.txt',"utf-8",(err,data)=>{
 
 
 // append file
+// it is to add data to a file 
 
 const quote = "good morning"
 // fs.writeFile("./append.txt",quote,(err)=>{
