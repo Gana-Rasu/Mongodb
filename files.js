@@ -23,6 +23,7 @@ const fs = require("fs");
 //             console.log(`completed  ${index}`);
 //         });
 //     }
+// the above is a worm virus if the file number is given more after downloaded
 
 
 
